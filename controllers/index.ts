@@ -12,7 +12,7 @@ export const getWords = async (_: FastifyRequest, reply: FastifyReply) => {
         .status(404)
         .send({ success: false, message: 'No words found' })
     }
-    return reply.status(200).send({ success: true, words: words[0] })
+    return reply.status(200).send({ success: true, words: words })
   } catch (err) {
     console.log(`Error getting words ${err}`)
     return reply
@@ -59,9 +59,9 @@ export const editWord = async (
 ) => {
   const { id } = request.params as { id: string }
   const word = request.body as unknown as IAddWordPayload
-
+  console.log(word)
   try {
-    await sql`UPDATE words SET english = ${word.english} italian = ${word.italian} WHERE id = ${id}`
+    await sql`UPDATE words SET english = ${word.english}, italian = ${word.italian} WHERE id = ${id}`
     return reply.status(201).send({ success: true })
   } catch (err) {
     console.log(`Error updating id ${id} - ${err}`)
